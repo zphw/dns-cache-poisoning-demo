@@ -8,4 +8,4 @@ WORKDIR /src
 
 COPY . .
 
-ENTRYPOINT python server.py
+ENTRYPOINT python dns.py

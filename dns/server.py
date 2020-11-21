@@ -6,7 +6,7 @@ from gevent.server import DatagramServer
 from gevent import socket
 from random import randint
 
-ns = '8.8.8.8'
+ns = '10.0.0.5'
 
 
 class Cache:
