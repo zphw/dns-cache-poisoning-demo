@@ -7,7 +7,7 @@ This project is to investigate and reproduce the DNS Cache Poisoning Attack with
 
 ### Prerequisities
 
-Docker and Docker Compose are needed for this project.
+You will need Docker and Docker Compose installed for this project.
 
 ### Build
 
@@ -15,6 +15,7 @@ Docker and Docker Compose are needed for this project.
 docker-compose build
 docker-compose up
 ```
+Upon running, the DNS resolver and upstream DNS server will start listening on port 53.
 
 ### Attack
 
@@ -36,7 +37,7 @@ python attack.py google.com 10.0.0.4
 
 As the output of the container `dns` shows, a fake DNS record has been successfully written into cache. It can be verified by using dig in the victim's container.
 
-First get into victim's container:
+First get into `victim`'s container:
 
 ```bash
 docker exec -it victim bash
@@ -57,8 +58,8 @@ It shows that in the answer section, the record is pointing to the adversary's I
 ### Project Architecture
 
 Four containers are used in this project:\
-`DNS` (`10.0.0.2`): Vulnerable DNS resolver\
-`Victim` (`10.0.0.3`): Victim host to prove the attack\
+`DNS` (`10.0.0.2`): A vulnerable DNS resolver\
+`Victim` (`10.0.0.3`): A victim host for proving the attack\
 `Attacker` (`10.0.0.4`): The adversary who will launch the attack\
 `Upstream DNS` (`10.0.0.5`): Plays the role of an upstream DNS server
 
@@ -78,13 +79,13 @@ A local authoritative DNS is set up to take the place of upstream DNS servers to
 
 The adversary first sends a DNS query to the DNS cache server (`10.0.0.2`), so the server will send a DNS request to the upstream server and begin accepting responses. Then it sends DNS answers trying all possible QID from the destination impersonating the upstream server (`10.0.0.5`) to the cache server (`10.0.0.2`).
 
-An attack script (`./attacker/attack.py`) is thereby created.
+An attack script (`/attacker/attack.py`) is thereby created.
 
 #### Usage:
 ```bash
-attack.py [target domain] [spoofed IP]
+python attack.py [target domain] [spoofed IP]
 ```
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). It was initially developed for CS 4404 Network Security B20 as a part of Mission 2 for Team 13. You may NOT directly use this repository if you are taking the same course as a student as per Academic Integrity Policy.
+This was initially developed for CS 4404 Network Security B20 as a part of Mission 2 for Team 13 and is licensed under the [MIT License](LICENSE). However, you may NOT directly use this repository if you are taking the same course as a student as per Academic Integrity Policy.
